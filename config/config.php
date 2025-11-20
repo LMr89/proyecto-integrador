@@ -41,11 +41,11 @@ define('APP_DEBUG', env('APP_DEBUG', 'true') === 'true');
 define('APP_URL', env('APP_URL', 'http://localhost'));
 
 // Constantes de base de datos
-define('DB_HOST', env('DB_HOST', 'localhost'));
+define('DB_HOST', env('DB_HOST', 'fw48koc4oggg88c4sgcg4k88'));
 define('DB_PORT', env('DB_PORT', '5060'));
 define('DB_NAME', env('DB_NAME', 'taller_bicicletas'));
 define('DB_USER', env('DB_USER', 'root'));
-define('DB_PASS', env('DB_PASS', ''));
+define('DB_PASS', env('DB_PASS', 'wbWpZlPGVj8rlEmvaRzGwHutwEvjbo1PrJzeqizFXASco6q1lxeipB1v9lvsb7gJ'));
 
 // Constantes de rutas
 define('ROOT_PATH', dirname(__DIR__));
