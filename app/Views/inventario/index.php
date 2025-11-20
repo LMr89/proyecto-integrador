@@ -11,7 +11,7 @@
             <p class="text-gray-600 mt-1">Consulta de productos y stock disponible</p>
         </div>
         <?php if ($_SESSION['usuario_rol'] === 'admin'): ?>
-            <a href="/UNIVERSIDAD/Integrador/7service/public/inventario/nuevo" 
+            <a href="<?php echo url('/inventario/nuevo'); ?>" 
                class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors shadow-md">
                 <i class="fas fa-plus mr-2"></i> Nuevo Producto
             </a>
@@ -125,7 +125,7 @@
                         class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
                     <i class="fas fa-filter mr-2"></i> Filtrar
                 </button>
-                <a href="/UNIVERSIDAD/Integrador/7service/public/inventario" 
+                <a href="<?php echo url('/inventario'); ?>" 
                    class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300">
                     <i class="fas fa-redo mr-2"></i> Limpiar
                 </a>
@@ -244,7 +244,7 @@
                                 </td>
                                 <?php if ($_SESSION['usuario_rol'] === 'admin'): ?>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <a href="/UNIVERSIDAD/Integrador/7service/public/inventario/<?= $producto['id_producto'] ?>/editar" 
+                                    <a href="<?php echo url('/inventario/<?= $producto['); ?>'id_producto'] ?>/editar" 
                                        class="text-blue-600 hover:text-blue-900 mr-3">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -274,7 +274,7 @@ function eliminarProducto(id) {
         return;
     }
     
-    fetch(`/UNIVERSIDAD/Integrador/7service/public/inventario/${id}/eliminar`, {
+    fetch(`<?php echo url('/inventario/${id}/eliminar`, {'); ?>
         method: 'POST',
         credentials: 'include'
     })

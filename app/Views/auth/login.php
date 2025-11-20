@@ -30,7 +30,7 @@
             </div>
             <?php endif; ?>
             
-            <form method="POST" action="/UNIVERSIDAD/Integrador/7service/public/process_login.php" class="space-y-6">
+            <form method="POST" action="<?php echo url('process_login.php'); ?>" class="space-y-6">
                 <!-- Campo de correo -->
                 <div>
                     <label for="correo" class="block text-sm font-medium text-gray-700">

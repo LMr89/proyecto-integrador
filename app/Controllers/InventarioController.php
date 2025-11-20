@@ -104,19 +104,19 @@ class InventarioController extends Controller
             // Validar campos requeridos
             if (empty($data['nombre'])) {
                 $_SESSION['error'] = 'El nombre del producto es requerido';
-                header('Location: /UNIVERSIDAD/Integrador/7service/public/inventario/nuevo');
+                redirect('/inventario/nuevo');
                 exit;
             }
             
             $id = $this->productoModel->create($data);
             
             $_SESSION['success'] = 'Producto creado exitosamente';
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/inventario');
+            redirect('/inventario');
             exit;
             
         } catch (\Exception $e) {
             $_SESSION['error'] = 'Error al crear producto: ' . $e->getMessage();
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/inventario/nuevo');
+            redirect('/inventario/nuevo');
             exit;
         }
     }
@@ -166,7 +166,7 @@ class InventarioController extends Controller
             $this->productoModel->update($id, $data);
             
             $_SESSION['success'] = 'Producto actualizado exitosamente';
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/inventario');
+            redirect('/inventario');
             exit;
             
         } catch (\Exception $e) {

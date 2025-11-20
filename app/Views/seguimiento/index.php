@@ -20,7 +20,7 @@
                         <p class="text-sm text-gray-600">Taller de Reparación de Bicicletas</p>
                     </div>
                 </div>
-                <a href="/UNIVERSIDAD/Integrador/7service/public/login" 
+                <a href="<?php echo url('/login'); ?>" 
                    class="text-blue-600 hover:text-blue-700 text-sm font-medium">
                     <i class="fas fa-sign-in-alt mr-1"></i> Acceso Técnicos
                 </a>
@@ -66,7 +66,7 @@
                     <?php unset($_SESSION['success']); ?>
                 <?php endif; ?>
 
-                <form method="POST" action="/UNIVERSIDAD/Integrador/7service/public/seguimiento/buscar" class="space-y-6">
+                <form method="POST" action="<?php echo url('/seguimiento/buscar'); ?>" class="space-y-6">
                     <div>
                         <label for="codigo" class="block text-lg font-semibold text-gray-700 mb-3">
                             <i class="fas fa-barcode mr-2 text-blue-600"></i>

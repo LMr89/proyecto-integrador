@@ -27,9 +27,9 @@ class AuthController extends Controller
     {
         // Si ya está autenticado, redirigir al dashboard
         if (isset($_SESSION['usuario_id'])) {
-            $this->redirect('/UNIVERSIDAD/Integrador/7service/public/dashboard');
+            redirect('/dashboard');
         }
-        
+
         $this->view('auth/login');
     }
     
@@ -68,7 +68,7 @@ class AuthController extends Controller
             $this->json([
                 'success' => true,
                 'message' => 'Login exitoso',
-                'redirect' => '/UNIVERSIDAD/Integrador/7service/public/dashboard'
+                'redirect' => url('/dashboard')
             ]);
         } else {
             $this->json([
@@ -84,7 +84,7 @@ class AuthController extends Controller
     public function logout(): void
     {
         session_destroy();
-        $this->redirect('/UNIVERSIDAD/Integrador/7service/public/login');
+        redirect('/login');
     }
     
     /**
@@ -94,9 +94,9 @@ class AuthController extends Controller
     {
         // Verificar que sea admin
         if (!isset($_SESSION['usuario_rol']) || $_SESSION['usuario_rol'] !== 'admin') {
-            $this->redirect('/UNIVERSIDAD/Integrador/7service/public/dashboard');
+            redirect('/dashboard');
         }
-        
+
         $this->view('auth/register');
     }
     

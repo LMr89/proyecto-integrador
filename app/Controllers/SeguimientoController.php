@@ -39,14 +39,14 @@ class SeguimientoController extends Controller
         
         if (empty($codigo)) {
             $_SESSION['error'] = 'Por favor ingresa un código de seguimiento';
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/seguimiento');
+            redirect('/seguimiento');
             exit;
         }
         
         // Validar formato (8 caracteres alfanuméricos)
         if (!preg_match('/^[A-Z0-9]{8}$/', $codigo)) {
             $_SESSION['error'] = 'El código debe tener 8 caracteres alfanuméricos';
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/seguimiento');
+            redirect('/seguimiento');
             exit;
         }
         
@@ -55,7 +55,7 @@ class SeguimientoController extends Controller
         
         if (!$orden) {
             $_SESSION['error'] = 'No se encontró ninguna orden con ese código';
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/seguimiento');
+            redirect('/seguimiento');
             exit;
         }
         
@@ -76,7 +76,7 @@ class SeguimientoController extends Controller
         
         if (!$orden) {
             $_SESSION['error'] = 'No se encontró ninguna orden con ese código';
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/seguimiento');
+            redirect('/seguimiento');
             exit;
         }
         

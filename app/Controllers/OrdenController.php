@@ -83,7 +83,7 @@ class OrdenController extends Controller
                 // Validar datos del cliente
                 if (empty($clienteData['nombre']) || empty($clienteData['contacto_telefono'])) {
                     $_SESSION['error'] = 'El nombre y teléfono del cliente son requeridos';
-                    header('Location: /UNIVERSIDAD/Integrador/7service/public/ordenes/nuevo');
+                    redirect('/ordenes/nuevo');
                     exit;
                 }
                 
@@ -105,7 +105,7 @@ class OrdenController extends Controller
             // Validar datos de la bicicleta
             if (empty($bicicletaData['marca']) || empty($bicicletaData['modelo'])) {
                 $_SESSION['error'] = 'La marca y modelo de la bicicleta son requeridos';
-                header('Location: /UNIVERSIDAD/Integrador/7service/public/ordenes/nuevo');
+                redirect('/ordenes/nuevo');
                 exit;
             }
             
@@ -131,7 +131,7 @@ class OrdenController extends Controller
             // Validar descripción del problema
             if (empty($ordenData['descripcion_problema'])) {
                 $_SESSION['error'] = 'La descripción del problema es requerida';
-                header('Location: /UNIVERSIDAD/Integrador/7service/public/ordenes/nuevo');
+                redirect('/ordenes/nuevo');
                 exit;
             }
             
@@ -147,7 +147,7 @@ class OrdenController extends Controller
             
         } catch (\Exception $e) {
             $_SESSION['error'] = 'Error al crear la orden: ' . $e->getMessage();
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/ordenes/nuevo');
+            redirect('/ordenes/nuevo');
             exit;
         }
     }
@@ -195,7 +195,7 @@ class OrdenController extends Controller
             
             if (!$orden) {
                 $_SESSION['error'] = 'Orden no encontrada';
-                header('Location: /UNIVERSIDAD/Integrador/7service/public/ordenes');
+                redirect('/ordenes');
                 exit;
             }
             

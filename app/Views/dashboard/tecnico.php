@@ -14,7 +14,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         
         <!-- Registrar Nueva Orden -->
-        <a href="/UNIVERSIDAD/Integrador/7service/public/ordenes/nuevo" 
+        <a href="<?php echo url('/ordenes/nuevo'); ?>" 
            class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl shadow-lg p-8 transition-all transform hover:scale-105">
             <div class="flex items-center justify-between">
                 <div>
@@ -31,7 +31,7 @@
         </a>
 
         <!-- Ver Inventario -->
-        <a href="/UNIVERSIDAD/Integrador/7service/public/inventario" 
+        <a href="<?php echo url('/inventario'); ?>" 
            class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-xl shadow-lg p-8 transition-all transform hover:scale-105">
             <div class="flex items-center justify-between">
                 <div>
@@ -111,7 +111,7 @@
                     <i class="fas fa-list-ul text-blue-600 mr-2"></i>
                     Mis Órdenes Activas
                 </h2>
-                <a href="/UNIVERSIDAD/Integrador/7service/public/ordenes" 
+                <a href="<?php echo url('/ordenes'); ?>" 
                    class="text-sm text-blue-600 hover:text-blue-700">
                     Ver todas <i class="fas fa-arrow-right ml-1"></i>
                 </a>
@@ -213,12 +213,12 @@
                                     <?= date('d/m/Y', strtotime($orden['fecha_creacion'])) ?>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="/UNIVERSIDAD/Integrador/7service/public/ordenes/<?= $orden['id_orden'] ?>" 
+                                    <a href="<?php echo url('/ordenes/<?= $orden['); ?>'id_orden'] ?>" 
                                        class="text-blue-600 hover:text-blue-900 mr-3" title="Ver detalles">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     <?php if (isset($orden['codigo_seguimiento'])): ?>
-                                        <a href="/UNIVERSIDAD/Integrador/7service/public/seguimiento/<?= htmlspecialchars($orden['codigo_seguimiento']) ?>" 
+                                        <a href="<?php echo url('/seguimiento/<?= htmlspecialchars($orden['); ?>'codigo_seguimiento']) ?>" 
                                            target="_blank"
                                            class="text-green-600 hover:text-green-900" title="Ver seguimiento público">
                                             <i class="fas fa-external-link-alt"></i>
@@ -235,7 +235,7 @@
                 <i class="fas fa-clipboard-list text-gray-300 text-6xl mb-4"></i>
                 <h3 class="text-xl font-semibold text-gray-800 mb-2">No tienes órdenes activas</h3>
                 <p class="text-gray-600 mb-6">Las órdenes que te asignen aparecerán aquí</p>
-                <a href="/UNIVERSIDAD/Integrador/7service/public/ordenes/nuevo" 
+                <a href="<?php echo url('/ordenes/nuevo'); ?>" 
                    class="inline-flex items-center bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
                     <i class="fas fa-plus mr-2"></i> Nueva Orden
                 </a>

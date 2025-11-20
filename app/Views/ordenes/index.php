@@ -4,7 +4,7 @@
     <!-- Breadcrumb -->
     <nav class="mb-6">
         <ol class="flex items-center space-x-2 text-sm text-gray-600">
-            <li><a href="/UNIVERSIDAD/Integrador/7service/public/dashboard" class="hover:text-blue-600">Dashboard</a></li>
+            <li><a href="<?php echo url('/dashboard'); ?>" class="hover:text-blue-600">Dashboard</a></li>
             <li><i class="fas fa-chevron-right text-xs"></i></li>
             <li class="text-gray-900 font-semibold">Órdenes de Servicio</li>
         </ol>
@@ -19,7 +19,7 @@
             </h1>
             <p class="text-gray-600 mt-1">Gestión de reparaciones y mantenimientos</p>
         </div>
-        <a href="/UNIVERSIDAD/Integrador/7service/public/ordenes/nuevo" 
+        <a href="<?php echo url('/ordenes/nuevo'); ?>" 
            class="mt-4 md:mt-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg inline-flex items-center">
             <i class="fas fa-plus mr-2"></i> Nueva Orden
         </a>
@@ -85,7 +85,7 @@
 
     <!-- Filtros -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-        <form method="GET" action="/UNIVERSIDAD/Integrador/7service/public/ordenes" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <form method="GET" action="<?php echo url('/ordenes'); ?>" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
                 <label for="estado" class="block text-sm font-medium text-gray-700 mb-2">
                     <i class="fas fa-filter mr-1"></i> Estado
@@ -131,7 +131,7 @@
 
         <?php if (!empty($filters['estado']) || !empty($filters['fecha_desde']) || !empty($filters['fecha_hasta'])): ?>
             <div class="mt-4">
-                <a href="/UNIVERSIDAD/Integrador/7service/public/ordenes" 
+                <a href="<?php echo url('/ordenes'); ?>" 
                    class="text-sm text-blue-600 hover:text-blue-700">
                     <i class="fas fa-times-circle mr-1"></i> Limpiar filtros
                 </a>
@@ -146,7 +146,7 @@
                 <i class="fas fa-clipboard-list text-gray-300 text-6xl mb-4"></i>
                 <h3 class="text-xl font-semibold text-gray-800 mb-2">No hay órdenes registradas</h3>
                 <p class="text-gray-600 mb-6">Comienza creando tu primera orden de servicio</p>
-                <a href="/UNIVERSIDAD/Integrador/7service/public/ordenes/nuevo" 
+                <a href="<?php echo url('/ordenes/nuevo'); ?>" 
                    class="inline-flex items-center bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
                     <i class="fas fa-plus mr-2"></i> Nueva Orden
                 </a>
@@ -250,11 +250,11 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="/UNIVERSIDAD/Integrador/7service/public/ordenes/<?= $orden['id_orden'] ?>" 
+                                    <a href="<?php echo url('/ordenes/<?= $orden['); ?>'id_orden'] ?>" 
                                        class="text-blue-600 hover:text-blue-900 mr-3" title="Ver detalles">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="/UNIVERSIDAD/Integrador/7service/public/seguimiento/<?= htmlspecialchars($orden['codigo_seguimiento']) ?>" 
+                                    <a href="<?php echo url('/seguimiento/<?= htmlspecialchars($orden['); ?>'codigo_seguimiento']) ?>" 
                                        target="_blank"
                                        class="text-green-600 hover:text-green-900" title="Ver seguimiento público">
                                         <i class="fas fa-external-link-alt"></i>

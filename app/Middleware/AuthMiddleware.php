@@ -19,8 +19,7 @@ class AuthMiddleware
         // Verificar si existe una sesión activa
         if (!isset($_SESSION['usuario_id'])) {
             // Redirigir al login
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/login');
-            exit;
+            redirect('/login');
         }
     }
 }

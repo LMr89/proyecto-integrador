@@ -34,6 +34,26 @@ function env($key, $default = null) {
     return $_ENV[$key] ?? $default;
 }
 
+// Función helper para generar URLs relativas al base path
+function url($path = '') {
+    $basePath = env('APP_BASE_PATH', '');
+    // Asegurar que el path comience con /
+    $path = '/' . ltrim($path, '/');
+    // Retornar base path + path
+    return $basePath . $path;
+}
+
+// Función helper para generar URL completa
+function full_url($path = '') {
+    return rtrim(env('APP_URL', 'http://localhost'), '/') . url($path);
+}
+
+// Función helper para redirecciones
+function redirect($path = '', $statusCode = 302) {
+    header('Location: ' . url($path), true, $statusCode);
+    exit;
+}
+
 // Definir constantes de la aplicación
 define('APP_NAME', env('APP_NAME', 'Seven Service'));
 define('APP_ENV', env('APP_ENV', 'development'));

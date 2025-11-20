@@ -10,7 +10,7 @@
             </h1>
             <p class="text-gray-600 mt-1">Administra la información de tus clientes</p>
         </div>
-        <a href="/UNIVERSIDAD/Integrador/7service/public/clientes/nuevo" 
+        <a href="<?php echo url('/clientes/nuevo'); ?>" 
            class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-md">
             <i class="fas fa-plus mr-2"></i> Nuevo Cliente
         </a>
@@ -130,7 +130,7 @@
                                 <i class="fas fa-users text-4xl mb-3"></i>
                                 <p class="text-lg">No hay clientes registrados</p>
                                 <p class="text-sm mt-2">Comienza agregando tu primer cliente</p>
-                                <a href="/UNIVERSIDAD/Integrador/7service/public/clientes/crear" 
+                                <a href="<?php echo url('/clientes/crear'); ?>" 
                                    class="inline-block mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
                                     <i class="fas fa-plus mr-2"></i> Agregar Cliente
                                 </a>
@@ -186,11 +186,11 @@
                                     ?>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                    <a href="/UNIVERSIDAD/Integrador/7service/public/clientes/<?php echo $cliente['id_cliente']; ?>" 
+                                    <a href="<?php echo url('/clientes/<?php echo $cliente['); ?>'id_cliente']; ?>" 
                                        class="text-blue-600 hover:text-blue-900" title="Ver detalle">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="/UNIVERSIDAD/Integrador/7service/public/clientes/<?php echo $cliente['id_cliente']; ?>/editar" 
+                                    <a href="<?php echo url('/clientes/<?php echo $cliente['); ?>'id_cliente']; ?>/editar" 
                                        class="text-yellow-600 hover:text-yellow-900" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -218,7 +218,7 @@ function buscarClientes() {
         return;
     }
     
-    fetch(`/UNIVERSIDAD/Integrador/7service/public/api/clientes/buscar?term=${encodeURIComponent(searchTerm)}`, {
+    fetch(`<?php echo url('/api/clientes/buscar?term=${encodeURIComponent(searchTerm)}`, {'); ?>
         credentials: 'include'
     })
     .then(response => response.json())
@@ -302,11 +302,11 @@ function mostrarResultados(clientes) {
                 ${new Date(cliente.fecha_registro).toLocaleDateString('es-PE')}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                <a href="/UNIVERSIDAD/Integrador/7service/public/clientes/${cliente.id_cliente}" 
+                <a href="<?php echo url('/clientes/${cliente.id_cliente}'); ?>" 
                    class="text-blue-600 hover:text-blue-900" title="Ver detalle">
                     <i class="fas fa-eye"></i>
                 </a>
-                <a href="/UNIVERSIDAD/Integrador/7service/public/clientes/${cliente.id_cliente}/editar" 
+                <a href="<?php echo url('/clientes/${cliente.id_cliente}/editar'); ?>" 
                    class="text-yellow-600 hover:text-yellow-900" title="Editar">
                     <i class="fas fa-edit"></i>
                 </a>
@@ -327,7 +327,7 @@ function eliminarCliente(id) {
     const formData = new FormData();
     formData.append('_method', 'DELETE');
     
-    fetch(`/UNIVERSIDAD/Integrador/7service/public/clientes/${id}/eliminar`, {
+    fetch(`<?php echo url('/clientes/${id}/eliminar`, {'); ?>
         method: 'POST',
         credentials: 'include',
         body: formData

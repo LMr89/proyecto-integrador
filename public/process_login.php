@@ -4,8 +4,7 @@ require_once __DIR__ . '/../config/config.php';
 
 // Verificar que sea POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: /UNIVERSIDAD/Integrador/7service/public/');
-    exit;
+    redirect('/');
 }
 
 // Obtener datos del formulario
@@ -15,8 +14,7 @@ $password = $_POST['password'] ?? '';
 // Validar que no estén vacíos
 if (empty($correo) || empty($password)) {
     $_SESSION['error_login'] = 'Por favor completa todos los campos';
-    header('Location: /UNIVERSIDAD/Integrador/7service/public/');
-    exit;
+    redirect('/');
 }
 
 try {
@@ -35,15 +33,13 @@ try {
     
     if (!$usuario) {
         $_SESSION['error_login'] = 'Credenciales inválidas';
-        header('Location: /UNIVERSIDAD/Integrador/7service/public/');
-        exit;
+        redirect('/');
     }
-    
+
     // Verificar contraseña
     if (!password_verify($password, $usuario['contraseña_hash'])) {
         $_SESSION['error_login'] = 'Credenciales inválidas';
-        header('Location: /UNIVERSIDAD/Integrador/7service/public/');
-        exit;
+        redirect('/');
     }
     
     // Login exitoso - crear sesión
@@ -55,14 +51,12 @@ try {
     // Actualizar última sesión
     $stmt = $pdo->prepare("UPDATE usuarios SET ultima_sesion = NOW() WHERE id_usuario = ?");
     $stmt->execute([$usuario['id_usuario']]);
-    
+
     // Redirigir al dashboard
-    header('Location: /UNIVERSIDAD/Integrador/7service/public/dashboard');
-    exit;
-    
+    redirect('/dashboard');
+
 } catch (PDOException $e) {
     $_SESSION['error_login'] = 'Error de conexión a la base de datos';
-    header('Location: /UNIVERSIDAD/Integrador/7service/public/');
-    exit;
+    redirect('/');
 }
 ?>

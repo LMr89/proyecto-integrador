@@ -76,7 +76,7 @@
                         <p class="text-sm text-gray-600">Seguimiento de Orden</p>
                     </div>
                 </div>
-                <a href="/UNIVERSIDAD/Integrador/7service/public/seguimiento" 
+                <a href="<?php echo url('/seguimiento'); ?>" 
                    class="text-blue-600 hover:text-blue-700 text-sm font-medium">
                     <i class="fas fa-search mr-1"></i> Nueva Consulta
                 </a>

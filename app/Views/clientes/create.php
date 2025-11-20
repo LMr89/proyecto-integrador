@@ -4,9 +4,9 @@
     <!-- Breadcrumb -->
     <nav class="mb-6">
         <ol class="flex items-center space-x-2 text-sm text-gray-600">
-            <li><a href="/UNIVERSIDAD/Integrador/7service/public/dashboard" class="hover:text-blue-600">Dashboard</a></li>
+            <li><a href="<?php echo url('/dashboard'); ?>" class="hover:text-blue-600">Dashboard</a></li>
             <li><i class="fas fa-chevron-right text-xs"></i></li>
-            <li><a href="/UNIVERSIDAD/Integrador/7service/public/clientes" class="hover:text-blue-600">Clientes</a></li>
+            <li><a href="<?php echo url('/clientes'); ?>" class="hover:text-blue-600">Clientes</a></li>
             <li><i class="fas fa-chevron-right text-xs"></i></li>
             <li class="text-gray-900 font-semibold">Nuevo Cliente</li>
         </ol>
@@ -23,7 +23,7 @@
 
     <!-- Formulario -->
     <div class="bg-white rounded-lg shadow-md p-8">
-        <form id="clienteForm" method="POST" action="/UNIVERSIDAD/Integrador/7service/public/clientes/nuevo">
+        <form id="clienteForm" method="POST" action="<?php echo url('/clientes/nuevo'); ?>">
             
             <!-- Sección: Información Personal -->
             <div class="mb-8">
@@ -101,7 +101,7 @@
 
             <!-- Botones -->
             <div class="flex justify-end space-x-4 pt-6 border-t">
-                <a href="/UNIVERSIDAD/Integrador/7service/public/clientes" 
+                <a href="<?php echo url('/clientes'); ?>" 
                    class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
                     <i class="fas fa-times mr-2"></i> Cancelar
                 </a>

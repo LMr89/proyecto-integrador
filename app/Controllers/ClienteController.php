@@ -64,27 +64,23 @@ class ClienteController extends Controller
             // Validar datos requeridos
             if (empty($data['nombre']) || strlen($data['nombre']) < 3) {
                 $_SESSION['error'] = 'El nombre debe tener al menos 3 caracteres';
-                header('Location: /UNIVERSIDAD/Integrador/7service/public/clientes/nuevo');
-                exit;
+                redirect('/clientes/nuevo');
             }
-            
+
             if (empty($data['contacto_telefono'])) {
                 $_SESSION['error'] = 'El teléfono es requerido';
-                header('Location: /UNIVERSIDAD/Integrador/7service/public/clientes/nuevo');
-                exit;
+                redirect('/clientes/nuevo');
             }
-            
+
             // Crear cliente
             $id = $this->clienteModel->create($data);
-            
+
             $_SESSION['success'] = 'Cliente creado exitosamente';
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/clientes');
-            exit;
-            
+            redirect('/clientes');
+
         } catch (\Exception $e) {
             $_SESSION['error'] = 'Error al crear cliente: ' . $e->getMessage();
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/clientes/nuevo');
-            exit;
+            redirect('/clientes/nuevo');
         }
     }
     

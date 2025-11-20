@@ -6,8 +6,7 @@ require_once __DIR__ . '/../config/config.php';
 
 // Si ya está autenticado, redirigir
 if (isset($_SESSION['usuario_id'])) {
-    header('Location: /UNIVERSIDAD/Integrador/7service/public/dashboard');
-    exit;
+    redirect('/dashboard');
 }
 ?>
 <!DOCTYPE html>
