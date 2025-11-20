@@ -1,0 +1,1196 @@
+openapi: 3.0.3
+info:
+  title: Seven Service API - Taller de Bicicletas
+  description: |
+    API REST para la gestión integral de un taller de bicicletas.
+    
+    ## Autenticación
+    La API utiliza sesiones PHP para autenticación. Debes iniciar sesión primero usando el endpoint `/login`.
+    
+    ## Roles de Usuario
+    - **admin**: Acceso completo al sistema (clientes, órdenes, inventario, usuarios)
+    - **tecnico**: Gestión de órdenes de servicio y consulta de inventario
+    - **encargado_almacen**: Gestión completa de inventario y productos
+    
+    ## Credenciales de Prueba
+    - Admin: `admin@sevenservice.com` / `admin123`
+    - Técnico 1: `tecnico1@sevenservice.com` / `tecnico123`
+    - Técnico 2: `tecnico2@sevenservice.com` / `tecnico123`
+    - Técnico 3: `tecnico3@sevenservice.com` / `tecnico123`
+    
+    ## Base de Datos
+    - Host: 127.0.0.1:5060 (SSH Tunnel)
+    - Database: taller_bicicletas
+    - Charset: UTF-8
+    
+  version: 1.0.0
+  contact:
+    name: Seven Service - Soporte Técnico
+    email: soporte@sevenservice.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost/UNIVERSIDAD/Integrador/7service/public
+    description: Servidor de desarrollo local
+  - url: http://localhost:80/UNIVERSIDAD/Integrador/7service/public
+    description: Servidor XAMPP local
+
+tags:
+  - name: Autenticación
+    description: Endpoints de inicio de sesión y cierre de sesión
+  - name: Dashboard
+    description: Estadísticas generales y específicas por rol
+  - name: Clientes
+    description: CRUD completo de clientes del taller
+  - name: Órdenes
+    description: Gestión de órdenes de servicio y reparaciones
+  - name: Bicicletas
+    description: Registro de bicicletas de los clientes
+  - name: Inventario
+    description: Gestión de productos, stock y proveedores
+  - name: Usuarios
+    description: Administración de usuarios del sistema (solo admin)
+
+paths:
+  # ==========================================
+  # AUTENTICACIÓN
+  # ==========================================
+  /login:
+    post:
+      tags:
+        - Autenticación
+      summary: Iniciar sesión en el sistema
+      description: Autentica un usuario y crea una sesión PHP
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                correo:
+                  type: string
+                  format: email
+                  example: admin@sevenservice.com
+                  description: Correo electrónico del usuario
+                password:
+                  type: string
+                  format: password
+                  example: admin123
+                  description: Contraseña del usuario
+              required:
+                - correo
+                - password
+      responses:
+        '302':
+          description: Redirige al dashboard correspondiente según el rol
+        '401':
+          description: Credenciales inválidas
+          content:
+            text/html:
+              schema:
+                type: string
+                example: Credenciales inválidas
+
+  /logout:
+    get:
+      tags:
+        - Autenticación
+      summary: Cerrar sesión
+      description: Destruye la sesión del usuario y redirige al login
+      operationId: logout
+      security:
+        - sessionAuth: []
+      responses:
+        '302':
+          description: Redirige a la página de login
+
+  # ==========================================
+  # DASHBOARD
+  # ==========================================
+  /dashboard:
+    get:
+      tags:
+        - Dashboard
+      summary: Dashboard principal
+      description: |
+        Muestra el dashboard según el rol del usuario:
+        - **Admin**: Estadísticas generales, órdenes pendientes, productos con stock bajo
+        - **Técnico**: Sus órdenes activas, estadísticas personales
+      operationId: getDashboard
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Vista del dashboard (HTML)
+          content:
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: No autenticado
+
+  /api/estadisticas:
+    get:
+      tags:
+        - Dashboard
+      summary: Obtener estadísticas en formato JSON
+      description: Endpoint API para obtener estadísticas del taller con filtros opcionales
+      operationId: getEstadisticas
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: fecha_desde
+          in: query
+          schema:
+            type: string
+            format: date
+            example: "2024-01-01"
+          description: Fecha de inicio para filtrar estadísticas
+        - name: fecha_hasta
+          in: query
+          schema:
+            type: string
+            format: date
+            example: "2024-12-31"
+          description: Fecha de fin para filtrar estadísticas
+      responses:
+        '200':
+          description: Estadísticas obtenidas exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Estadisticas'
+        '401':
+          description: No autenticado
+
+  # ==========================================
+  # CLIENTES
+  # ==========================================
+  /clientes:
+    get:
+      tags:
+        - Clientes
+      summary: Listar todos los clientes activos
+      description: Muestra una vista HTML con la lista de clientes y filtros de búsqueda
+      operationId: getClientes
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+            example: "Juan"
+          description: Buscar por nombre, teléfono, correo o DNI
+      responses:
+        '200':
+          description: Lista de clientes (vista HTML)
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /clientes/nuevo:
+    get:
+      tags:
+        - Clientes
+      summary: Formulario para crear cliente
+      description: Muestra el formulario HTML para registrar un nuevo cliente
+      operationId: showCreateClienteForm
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Formulario de creación
+          content:
+            text/html:
+              schema:
+                type: string
+    
+    post:
+      tags:
+        - Clientes
+      summary: Crear nuevo cliente
+      description: Registra un nuevo cliente en el sistema
+      operationId: createCliente
+      security:
+        - sessionAuth: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClienteInput'
+      responses:
+        '302':
+          description: Cliente creado, redirige a la lista
+          headers:
+            Location:
+              schema:
+                type: string
+                example: /clientes
+        '400':
+          description: Error de validación
+
+  /clientes/{id}:
+    get:
+      tags:
+        - Clientes
+      summary: Ver detalle de un cliente
+      description: Muestra la información completa del cliente, sus bicicletas y historial de órdenes
+      operationId: getCliente
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+          description: ID del cliente
+      responses:
+        '200':
+          description: Detalle del cliente
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Cliente no encontrado
+
+  /clientes/{id}/editar:
+    get:
+      tags:
+        - Clientes
+      summary: Formulario para editar cliente
+      operationId: showEditClienteForm
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Formulario de edición
+
+  /clientes/{id}/actualizar:
+    post:
+      tags:
+        - Clientes
+      summary: Actualizar datos de un cliente
+      operationId: updateCliente
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClienteInput'
+      responses:
+        '302':
+          description: Cliente actualizado
+
+  /clientes/{id}/eliminar:
+    post:
+      tags:
+        - Clientes
+      summary: Eliminar (desactivar) un cliente
+      description: Realiza un soft delete del cliente (marca como inactivo)
+      operationId: deleteCliente
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Cliente eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+
+  /api/clientes/buscar:
+    get:
+      tags:
+        - Clientes
+      summary: API de búsqueda de clientes
+      description: Busca clientes por término (para autocompletado en formularios)
+      operationId: searchClientes
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: term
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 2
+            example: "Juan"
+          description: Término de búsqueda (mínimo 2 caracteres)
+      responses:
+        '200':
+          description: Resultados de búsqueda
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Cliente'
+
+  # ==========================================
+  # ÓRDENES DE SERVICIO
+  # ==========================================
+  /ordenes:
+    get:
+      tags:
+        - Órdenes
+      summary: Listar órdenes de servicio
+      description: Muestra todas las órdenes con filtros opcionales
+      operationId: getOrdenes
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: estado
+          in: query
+          schema:
+            type: string
+            enum: [pendiente, en_proceso, en_espera, completado, entregado, cancelado]
+          description: Filtrar por estado
+        - name: fecha_desde
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: fecha_hasta
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Lista de órdenes
+
+  /ordenes/nuevo:
+    get:
+      tags:
+        - Órdenes
+      summary: Formulario para crear orden
+      description: |
+        Muestra el formulario completo para crear una nueva orden.
+        Incluye 3 pasos:
+        1. Selección/creación de cliente
+        2. Registro de bicicleta
+        3. Detalles del servicio
+      operationId: showCreateOrdenForm
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Formulario de nueva orden
+    
+    post:
+      tags:
+        - Órdenes
+      summary: Crear nueva orden de servicio
+      description: |
+        Crea una nueva orden de servicio. Puede crear un cliente nuevo y su bicicleta,
+        o usar un cliente existente y registrar una nueva bicicleta.
+      operationId: createOrden
+      security:
+        - sessionAuth: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrdenInput'
+      responses:
+        '302':
+          description: Orden creada exitosamente
+          headers:
+            Location:
+              schema:
+                type: string
+                example: /ordenes/123
+        '400':
+          description: Error de validación
+
+  /ordenes/{id}:
+    get:
+      tags:
+        - Órdenes
+      summary: Ver detalle de una orden
+      description: Muestra toda la información de la orden, productos usados e historial de estados
+      operationId: getOrden
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalle de la orden
+        '404':
+          description: Orden no encontrada
+
+  /ordenes/{id}/cambiar-estado:
+    post:
+      tags:
+        - Órdenes
+      summary: Cambiar estado de una orden
+      description: Actualiza el estado de la orden y registra el cambio en el historial
+      operationId: cambiarEstadoOrden
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                estado:
+                  type: string
+                  enum: [pendiente, en_proceso, en_espera, completado, entregado, cancelado]
+                  example: "en_proceso"
+                comentario:
+                  type: string
+                  example: "Se inició la reparación de frenos"
+              required:
+                - estado
+      responses:
+        '302':
+          description: Estado actualizado
+        '400':
+          description: Estado inválido
+
+  # ==========================================
+  # INVENTARIO
+  # ==========================================
+  /inventario:
+    get:
+      tags:
+        - Inventario
+      summary: Listar productos del inventario
+      description: |
+        Muestra todos los productos con estadísticas y filtros.
+        - Técnicos: Solo consulta (sin botones de edición)
+        - Admin: Consulta y gestión completa
+      operationId: getInventario
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Buscar por nombre o SKU
+        - name: categoria
+          in: query
+          schema:
+            type: integer
+          description: Filtrar por categoría
+        - name: stock_bajo
+          in: query
+          schema:
+            type: string
+            enum: ["1"]
+          description: Mostrar solo productos con stock bajo
+      responses:
+        '200':
+          description: Lista de productos
+
+  /inventario/nuevo:
+    get:
+      tags:
+        - Inventario
+      summary: Formulario para crear producto
+      operationId: showCreateProductoForm
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Formulario de nuevo producto
+    
+    post:
+      tags:
+        - Inventario
+      summary: Crear nuevo producto
+      operationId: createProducto
+      security:
+        - sessionAuth: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductoInput'
+      responses:
+        '302':
+          description: Producto creado
+        '400':
+          description: Error de validación
+
+  /inventario/{id}/editar:
+    get:
+      tags:
+        - Inventario
+      summary: Formulario para editar producto
+      operationId: showEditProductoForm
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Formulario de edición
+
+  /inventario/{id}/actualizar:
+    post:
+      tags:
+        - Inventario
+      summary: Actualizar producto
+      operationId: updateProducto
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductoInput'
+      responses:
+        '302':
+          description: Producto actualizado
+
+  /inventario/{id}/eliminar:
+    post:
+      tags:
+        - Inventario
+      summary: Eliminar producto
+      operationId: deleteProducto
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Producto eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+
+  /api/productos/buscar:
+    get:
+      tags:
+        - Inventario
+      summary: API de búsqueda de productos
+      description: Para autocompletado en formularios de órdenes
+      operationId: searchProductos
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: term
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resultados de búsqueda
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Producto'
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+      description: |
+        Autenticación basada en sesiones PHP.
+        Después de hacer login exitoso, la sesión se mantiene automáticamente.
+
+  schemas:
+    # ==========================================
+    # SCHEMAS DE ERROR
+    # ==========================================
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Error en la operación
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example:
+            nombre: ["El nombre es requerido"]
+            telefono: ["El teléfono debe tener 9 dígitos"]
+
+    # ==========================================
+    # ESTADÍSTICAS
+    # ==========================================
+    Estadisticas:
+      type: object
+      properties:
+        total_ordenes:
+          type: integer
+          example: 45
+          description: Total de órdenes en el período
+        pendientes:
+          type: integer
+          example: 8
+          description: Órdenes pendientes
+        en_reparacion:
+          type: integer
+          example: 12
+          description: Órdenes en proceso de reparación
+        entregadas:
+          type: integer
+          example: 20
+          description: Órdenes completadas y entregadas
+        total_ventas:
+          type: number
+          format: float
+          example: 12500.50
+          description: Suma total de ventas
+        promedio_venta:
+          type: number
+          format: float
+          example: 278.90
+          description: Promedio de venta por orden
+
+    # ==========================================
+    # CLIENTES
+    # ==========================================
+    Cliente:
+      type: object
+      properties:
+        id_cliente:
+          type: integer
+          example: 1
+          description: ID único del cliente
+        nombre:
+          type: string
+          example: "Juan Pérez García"
+          description: Nombre completo del cliente
+        contacto_telefono:
+          type: string
+          example: "987654321"
+          description: Teléfono de contacto (9 dígitos)
+        contacto_email:
+          type: string
+          format: email
+          example: "juan.perez@example.com"
+          description: Correo electrónico
+        direccion:
+          type: string
+          example: "Av. Principal 123, San Isidro"
+          description: Dirección del cliente
+        notas:
+          type: string
+          example: "Cliente frecuente, prefiere atención los lunes"
+          description: Notas adicionales del cliente
+        fecha_registro:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+          description: Fecha de registro en el sistema
+        activo:
+          type: boolean
+          example: true
+          description: Estado del cliente (true=activo, false=inactivo)
+        total_bicicletas:
+          type: integer
+          example: 2
+          description: Número de bicicletas registradas
+        total_ordenes:
+          type: integer
+          example: 5
+          description: Número de órdenes de servicio
+
+    ClienteInput:
+      type: object
+      required:
+        - nombre
+        - contacto_telefono
+      properties:
+        nombre:
+          type: string
+          minLength: 3
+          maxLength: 150
+          example: "Juan Pérez García"
+          description: Nombre completo del cliente
+        contacto_telefono:
+          type: string
+          pattern: '^[0-9]{9}$'
+          example: "987654321"
+          description: Teléfono de 9 dígitos
+        contacto_email:
+          type: string
+          format: email
+          example: "juan@example.com"
+          description: Correo electrónico (opcional)
+        direccion:
+          type: string
+          example: "Av. Principal 123"
+          description: Dirección del cliente (opcional)
+        notas:
+          type: string
+          example: "Cliente frecuente"
+          description: Notas adicionales (opcional)
+
+    # ==========================================
+    # BICICLETAS
+    # ==========================================
+    Bicicleta:
+      type: object
+      properties:
+        id_bicicleta:
+          type: integer
+          example: 1
+        id_cliente:
+          type: integer
+          example: 1
+        marca:
+          type: string
+          example: "Trek"
+        modelo:
+          type: string
+          example: "Mountain Bike X500"
+        tipo:
+          type: string
+          enum: [Montaña, Ruta, Urbana, BMX, Eléctrica, Híbrida]
+          example: "Montaña"
+        color:
+          type: string
+          example: "Rojo"
+        numero_serie:
+          type: string
+          example: "TRK2024-001234"
+        año_fabricacion:
+          type: integer
+          example: 2023
+        notas:
+          type: string
+          example: "Cuadro de aluminio, suspensión delantera"
+        fecha_registro:
+          type: string
+          format: date-time
+
+    BicicletaInput:
+      type: object
+      required:
+        - marca
+        - modelo
+      properties:
+        marca:
+          type: string
+          example: "Trek"
+        modelo:
+          type: string
+          example: "Mountain Bike X500"
+        tipo:
+          type: string
+          example: "Montaña"
+        color:
+          type: string
+          example: "Rojo"
+        numero_serie:
+          type: string
+          example: "TRK2024-001234"
+        año_fabricacion:
+          type: integer
+          minimum: 1990
+          maximum: 2025
+          example: 2023
+        notas:
+          type: string
+
+    # ==========================================
+    # PRODUCTOS
+    # ==========================================
+    Producto:
+      type: object
+      properties:
+        id_producto:
+          type: integer
+          example: 1
+        sku:
+          type: string
+          example: "CADENA-001"
+          description: Código SKU del producto
+        nombre:
+          type: string
+          example: "Cadena Shimano 9V"
+          description: Nombre del producto
+        descripcion:
+          type: string
+          example: "Cadena de 9 velocidades, compatible con MTB"
+        id_categoria:
+          type: integer
+          example: 3
+        categoria_nombre:
+          type: string
+          example: "Transmisión"
+        id_proveedor:
+          type: integer
+          example: 1
+        proveedor_nombre:
+          type: string
+          example: "Distribuidora Bike Parts"
+        precio_compra:
+          type: number
+          format: float
+          example: 45.50
+          description: Precio de compra al proveedor
+        precio_venta:
+          type: number
+          format: float
+          example: 85.00
+          description: Precio de venta al cliente
+        stock_actual:
+          type: integer
+          example: 15
+          description: Stock disponible actual
+        stock_minimo:
+          type: integer
+          example: 5
+          description: Stock mínimo antes de alerta
+        unidad_medida:
+          type: string
+          example: "unidad"
+          description: Unidad de medida (unidad, metro, litro, etc)
+        activo:
+          type: boolean
+          example: true
+        fecha_creacion:
+          type: string
+          format: date-time
+
+    ProductoInput:
+      type: object
+      required:
+        - nombre
+      properties:
+        sku:
+          type: string
+          example: "CADENA-001"
+        nombre:
+          type: string
+          minLength: 3
+          example: "Cadena Shimano 9V"
+        descripcion:
+          type: string
+          example: "Cadena de 9 velocidades"
+        id_categoria:
+          type: integer
+          example: 3
+        id_proveedor:
+          type: integer
+          example: 1
+        precio_compra:
+          type: number
+          format: float
+          minimum: 0
+          example: 45.50
+        precio_venta:
+          type: number
+          format: float
+          minimum: 0
+          example: 85.00
+        stock_actual:
+          type: integer
+          minimum: 0
+          example: 15
+        stock_minimo:
+          type: integer
+          minimum: 0
+          example: 5
+        unidad_medida:
+          type: string
+          example: "unidad"
+
+    # ==========================================
+    # ÓRDENES DE SERVICIO
+    # ==========================================
+    OrdenServicio:
+      type: object
+      properties:
+        id_orden:
+          type: integer
+          example: 123
+        id_cliente:
+          type: integer
+          example: 1
+        cliente_nombre:
+          type: string
+          example: "Juan Pérez"
+        id_bicicleta:
+          type: integer
+          example: 5
+        bicicleta_marca:
+          type: string
+          example: "Trek"
+        bicicleta_modelo:
+          type: string
+          example: "Mountain Bike X500"
+        id_usuario_creador:
+          type: integer
+          example: 2
+        id_usuario_asignado:
+          type: integer
+          example: 3
+        tecnico_asignado:
+          type: string
+          example: "Juan Técnico"
+        descripcion_problema:
+          type: string
+          example: "Frenos delanteros no responden, cadena con ruido"
+        diagnostico_tecnico:
+          type: string
+          example: "Pastillas de freno desgastadas, cadena necesita lubricación"
+        observaciones_entrega:
+          type: string
+          example: "Cliente solicita entrega antes del viernes"
+        estado:
+          type: string
+          enum: 
+            - pendiente
+            - en_proceso
+            - en_espera
+            - completado
+            - entregado
+            - cancelado
+          example: "en_proceso"
+        prioridad:
+          type: string
+          enum: [Baja, Normal, Alta, Urgente]
+          example: "Normal"
+        costo_mano_obra:
+          type: number
+          format: float
+          example: 50.00
+        costo_productos:
+          type: number
+          format: float
+          example: 120.00
+        descuento:
+          type: number
+          format: float
+          example: 10.00
+        costo_total:
+          type: number
+          format: float
+          example: 160.00
+        requiere_aprobacion:
+          type: boolean
+          example: false
+        aprobado_por_cliente:
+          type: boolean
+          example: false
+        fecha_creacion:
+          type: string
+          format: date-time
+        fecha_estimada_entrega:
+          type: string
+          format: date
+          example: "2024-11-15"
+        fecha_finalizacion:
+          type: string
+          format: date-time
+
+    OrdenInput:
+      type: object
+      required:
+        - descripcion_problema
+        - bicicleta_marca
+        - bicicleta_modelo
+      properties:
+        # Cliente (nuevo o existente)
+        cliente_id:
+          type: string
+          example: "5"
+          description: ID del cliente existente, o "nuevo" para crear uno
+        cliente_nombre:
+          type: string
+          example: "Juan Pérez"
+          description: Requerido si cliente_id = "nuevo"
+        cliente_telefono:
+          type: string
+          example: "987654321"
+          description: Requerido si cliente_id = "nuevo"
+        cliente_email:
+          type: string
+          example: "juan@example.com"
+        cliente_direccion:
+          type: string
+          example: "Av. Principal 123"
+        
+        # Bicicleta (siempre nueva)
+        bicicleta_marca:
+          type: string
+          example: "Trek"
+        bicicleta_modelo:
+          type: string
+          example: "Mountain Bike X500"
+        bicicleta_tipo:
+          type: string
+          example: "Montaña"
+        bicicleta_color:
+          type: string
+          example: "Rojo"
+        bicicleta_numero_serie:
+          type: string
+          example: "TRK001"
+        bicicleta_año:
+          type: integer
+          example: 2023
+        bicicleta_notas:
+          type: string
+        
+        # Orden
+        descripcion_problema:
+          type: string
+          example: "Frenos no responden, cadena con ruido"
+        diagnostico_inicial:
+          type: string
+          example: "Pastillas gastadas, cadena necesita lubricación"
+        prioridad:
+          type: string
+          enum: [Baja, Normal, Alta, Urgente]
+          example: "Normal"
+        fecha_estimada:
+          type: string
+          format: date
+          example: "2024-11-15"
+        observaciones:
+          type: string
+        requiere_aprobacion:
+          type: boolean
+          example: false
+
+    # ==========================================
+    # CATEGORÍAS Y PROVEEDORES
+    # ==========================================
+    Categoria:
+      type: object
+      properties:
+        id_categoria:
+          type: integer
+          example: 1
+        nombre:
+          type: string
+          example: "Transmisión"
+        descripcion:
+          type: string
+          example: "Componentes de transmisión: cadenas, piñones, platos"
+        activo:
+          type: boolean
+          example: true
+
+    Proveedor:
+      type: object
+      properties:
+        id_proveedor:
+          type: integer
+          example: 1
+        nombre:
+          type: string
+          example: "Distribuidora Bike Parts"
+        contacto_nombre:
+          type: string
+          example: "María González"
+        telefono:
+          type: string
+          example: "987654321"
+        email:
+          type: string
+          example: "ventas@bikeparts.com"
+        direccion:
+          type: string
+          example: "Jr. Los Ciclistas 456"
+        activo:
+          type: boolean
+          example: true

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seven Service API - Documentación Swagger</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        #swagger-ui {
+            max-width: 1460px;
+            margin: 0 auto;
+        }
+        
+        .swagger-ui .topbar {
+            background-color: #2c3e50;
+            padding: 10px 0;
+        }
+        
+        .swagger-ui .topbar .wrapper {
+            max-width: 1460px;
+            margin: 0 auto;
+        }
+        
+        .custom-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .custom-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        
+        .custom-header p {
+            margin: 0.5rem 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .info-panel {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            max-width: 1460px;
+        }
+        
+        .info-panel h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .credentials {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .credentials table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .credentials th,
+        .credentials td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .credentials th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .credentials tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .badge-admin {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .badge-tecnico {
+            background: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Personalizado -->
+    <div class="custom-header">
+        <h1>🚴 Seven Service API</h1>
+        <p>Documentación Completa del Sistema de Gestión de Taller de Bicicletas</p>
+    </div>
+
+    <!-- Panel de Información -->
+    <div class="info-panel">
+        <h3>📋 Información de Acceso</h3>
+        <p>Esta API utiliza <strong>autenticación basada en sesiones PHP</strong>. Primero debes hacer login usando el endpoint <code>POST /login</code>.</p>
+        
+        <div class="credentials">
+            <h4>🔑 Credenciales de Prueba</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rol</th>
+                        <th>Usuario</th>
+                        <th>Contraseña</th>
+                        <th>Permisos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-admin">ADMIN</span></td>
+                        <td>admin@sevenservice.com</td>
+                        <td>admin123</td>
+                        <td>Acceso completo a todos los módulos</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-tecnico">TÉCNICO</span></td>
+                        <td>tecnico1@sevenservice.com</td>
+                        <td>tecnico123</td>
+                        <td>Gestión de órdenes, consulta de inventario</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-tecnico">TÉCNICO</span></td>
+                        <td>tecnico2@sevenservice.com</td>
+                        <td>tecnico123</td>
+                        <td>Gestión de órdenes, consulta de inventario</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-tecnico">TÉCNICO</span></td>
+                        <td>tecnico3@sevenservice.com</td>
+                        <td>tecnico123</td>
+                        <td>Gestión de órdenes, consulta de inventario</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+            <h4>🔧 Configuración de Base de Datos</h4>
+            <ul>
+                <li><strong>Host:</strong> 127.0.0.1:5060 (SSH Tunnel activo requerido)</li>
+                <li><strong>Base de Datos:</strong> taller_bicicletas</li>
+                <li><strong>Motor:</strong> MySQL 8.4.6</li>
+                <li><strong>Charset:</strong> UTF-8</li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 1.5rem; background: #fff3cd; padding: 1rem; border-radius: 4px; border-left: 4px solid #ffc107;">
+            <strong>⚠️ Importante:</strong> Asegúrate de que el túnel SSH esté activo antes de usar la API:
+            <code style="display: block; margin-top: 0.5rem; padding: 0.5rem; background: white; border-radius: 4px;">
+                ssh -L 5060:localhost:5060 proyecto_user@5.78.122.209
+            </code>
+        </div>
+    </div>
+
+    <!-- Swagger UI Container -->
+    <div id="swagger-ui"></div>
+
+    <script src="https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-bundle.js"></script>
+    <script src="https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js"></script>
+    <script>
+        window.onload = function() {
+            const ui = SwaggerUIBundle({
+                // Usa el endpoint automático que genera el JSON dinámicamente
+                url: "/UNIVERSIDAD/Integrador/7service/public/swagger-auto.php",
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout",
+                defaultModelsExpandDepth: 1,
+                defaultModelExpandDepth: 1,
+                docExpansion: 'list',
+                filter: true,
+                tryItOutEnabled: true,
+                requestSnippetsEnabled: true,
+                persistAuthorization: true
+            });
+
+            window.ui = ui;
+        };
+    </script>
+</body>
+</html>

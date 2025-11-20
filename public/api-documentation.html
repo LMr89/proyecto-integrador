@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seven Service - Documentación API</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .endpoint-card { transition: all 0.3s; }
+        .endpoint-card:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
+        .method-get { background: #10b981; }
+        .method-post { background: #3b82f6; }
+        .method-put { background: #f59e0b; }
+        .method-delete { background: #ef4444; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-bicycle text-3xl text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold">Seven Service API</h1>
+                        <p class="text-blue-100">Documentación de API REST - v1.0.0</p>
+                    </div>
+                </div>
+                <a href="/UNIVERSIDAD/Integrador/7service/public/dashboard" 
+                   class="bg-white text-blue-600 px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                    <i class="fas fa-home mr-2"></i> Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Información General -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                Información General
+            </h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <p class="text-gray-600 mb-2"><strong>Base URL:</strong></p>
+                    <code class="bg-gray-100 px-3 py-1 rounded text-sm">
+                        http://localhost/UNIVERSIDAD/Integrador/7service/public
+                    </code>
+                </div>
+                <div>
+                    <p class="text-gray-600 mb-2"><strong>Formato de respuesta:</strong></p>
+                    <code class="bg-gray-100 px-3 py-1 rounded text-sm">JSON / HTML</code>
+                </div>
+                <div>
+                    <p class="text-gray-600 mb-2"><strong>Autenticación:</strong></p>
+                    <code class="bg-gray-100 px-3 py-1 rounded text-sm">Session-based (Cookies)</code>
+                </div>
+                <div>
+                    <p class="text-gray-600 mb-2"><strong>Base de datos:</strong></p>
+                    <code class="bg-gray-100 px-3 py-1 rounded text-sm">MySQL (localhost:5060 via SSH)</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- JSON Raw -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">
+                    <i class="fas fa-code text-purple-600 mr-2"></i>
+                    JSON Completo
+                </h2>
+                <button onclick="toggleJson()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                    <i class="fas fa-eye mr-2"></i>
+                    <span id="toggleText">Mostrar JSON</span>
+                </button>
+            </div>
+            <div id="jsonContainer" class="hidden">
+                <pre id="jsonContent" class="text-sm"></pre>
+                <button onclick="copyJson()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    <i class="fas fa-copy mr-2"></i> Copiar JSON
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Start -->
+        <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg shadow-md p-6 mb-8 border-l-4 border-green-500">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-rocket text-green-600 mr-2"></i>
+                Quick Start
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="font-bold text-lg mb-2">1. Autenticación</h3>
+                    <pre class="text-xs">POST /process_login.php
+Content-Type: application/x-www-form-urlencoded
+
+correo=admin@sevenservice.com&password=admin123</pre>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2">2. Obtener Estadísticas</h3>
+                    <pre class="text-xs">GET /api/estadisticas
+Cookie: PHPSESSID=...</pre>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2">3. Buscar Clientes</h3>
+                    <pre class="text-xs">GET /api/clientes/buscar?term=juan
+Cookie: PHPSESSID=...</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejemplo con JavaScript -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">
+                <i class="fab fa-js text-yellow-500 mr-2"></i>
+                Ejemplo de uso con JavaScript
+            </h2>
+            <pre class="text-sm">// Login
+fetch('http://localhost/UNIVERSIDAD/Integrador/7service/public/process_login.php', {
+    method: 'POST',
+    credentials: 'include', // ⚠️ Importante: mantiene la sesión
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: 'correo=admin@sevenservice.com&password=admin123'
+})
+.then(response => {
+    if (response.redirected) {
+        console.log('Login exitoso, redirigido a:', response.url);
+    }
+});
+
+// Obtener estadísticas (después del login)
+fetch('http://localhost/UNIVERSIDAD/Integrador/7service/public/api/estadisticas', {
+    credentials: 'include' // Envía la cookie de sesión
+})
+.then(response => response.json())
+.then(data => console.log('Estadísticas:', data));
+
+// Buscar clientes
+fetch('http://localhost/UNIVERSIDAD/Integrador/7service/public/api/clientes/buscar?term=juan', {
+    credentials: 'include'
+})
+.then(response => response.json())
+.then(clientes => console.log('Clientes encontrados:', clientes));</pre>
+        </div>
+
+        <!-- Endpoints por Categoría -->
+        <div id="endpointsContainer" class="space-y-6">
+            <!-- Se llenará con JavaScript -->
+        </div>
+
+        <!-- Modelos de Datos -->
+        <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-database text-indigo-600 mr-2"></i>
+                Modelos de Datos
+            </h2>
+            <div id="modelosContainer" class="grid md:grid-cols-2 gap-6">
+                <!-- Se llenará con JavaScript -->
+            </div>
+        </div>
+
+        <!-- Notas Importantes -->
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 rounded-lg shadow-md p-6 mt-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-exclamation-triangle text-yellow-600 mr-2"></i>
+                Notas Importantes
+            </h2>
+            <ul id="notasContainer" class="space-y-2 text-gray-700">
+                <!-- Se llenará con JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>Seven Service API - Sistema de Gestión de Taller de Bicicletas</p>
+            <p class="text-gray-400 text-sm mt-2">Desarrollado con ❤️ usando PHP, MySQL y Tailwind CSS</p>
+        </div>
+    </footer>
+
+    <script>
+        let apiData = null;
+
+        // Cargar datos de la API
+        fetch('api-docs.php')
+            .then(response => response.json())
+            .then(data => {
+                apiData = data;
+                renderEndpoints(data.endpoints);
+                renderModelos(data.modelos_de_datos);
+                renderNotas(data.notas_importantes);
+                document.getElementById('jsonContent').textContent = JSON.stringify(data, null, 2);
+            });
+
+        function renderEndpoints(endpoints) {
+            const container = document.getElementById('endpointsContainer');
+            
+            endpoints.forEach(categoria => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'bg-white rounded-lg shadow-md p-6';
+                
+                categoryDiv.innerHTML = `
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">
+                        <i class="fas fa-folder-open text-blue-600 mr-2"></i>
+                        ${categoria.categoria}
+                    </h2>
+                    <div class="space-y-4">
+                        ${categoria.rutas.map(ruta => `
+                            <div class="endpoint-card border rounded-lg p-4 hover:shadow-lg">
+                                <div class="flex items-start justify-between mb-2">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="method-${ruta.metodo.toLowerCase()} text-white px-3 py-1 rounded font-bold text-sm">
+                                            ${ruta.metodo}
+                                        </span>
+                                        <code class="text-gray-700 font-mono">${ruta.ruta}</code>
+                                    </div>
+                                    ${ruta.autenticacion_requerida ? 
+                                        '<span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs"><i class="fas fa-lock mr-1"></i>Auth</span>' 
+                                        : ''}
+                                </div>
+                                <p class="text-gray-600 mb-2">${ruta.descripcion}</p>
+                                ${ruta.parametros ? `
+                                    <details class="mt-2">
+                                        <summary class="cursor-pointer text-blue-600 hover:text-blue-800">
+                                            <i class="fas fa-chevron-down mr-1"></i> Parámetros
+                                        </summary>
+                                        <div class="mt-2 ml-4 space-y-1">
+                                            ${Object.entries(ruta.parametros).map(([key, value]) => `
+                                                <div class="text-sm">
+                                                    <code class="bg-gray-100 px-2 py-1 rounded">${key}</code>
+                                                    <span class="text-gray-600">: ${value}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </details>
+                                ` : ''}
+                                ${ruta.respuesta_ejemplo ? `
+                                    <details class="mt-2">
+                                        <summary class="cursor-pointer text-green-600 hover:text-green-800">
+                                            <i class="fas fa-chevron-down mr-1"></i> Respuesta ejemplo
+                                        </summary>
+                                        <pre class="mt-2 text-xs">${JSON.stringify(ruta.respuesta_ejemplo, null, 2)}</pre>
+                                    </details>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(categoryDiv);
+            });
+        }
+
+        function renderModelos(modelos) {
+            const container = document.getElementById('modelosContainer');
+            
+            Object.entries(modelos).forEach(([nombre, campos]) => {
+                const modelDiv = document.createElement('div');
+                modelDiv.className = 'border rounded-lg p-4';
+                
+                modelDiv.innerHTML = `
+                    <h3 class="font-bold text-lg mb-3 text-indigo-700">${nombre}</h3>
+                    <div class="space-y-1 text-sm">
+                        ${Object.entries(campos).map(([campo, tipo]) => `
+                            <div class="flex justify-between">
+                                <code class="text-gray-700">${campo}</code>
+                                <span class="text-gray-500">${tipo}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(modelDiv);
+            });
+        }
+
+        function renderNotas(notas) {
+            const container = document.getElementById('notasContainer');
+            
+            notas.forEach(nota => {
+                const li = document.createElement('li');
+                li.innerHTML = `<i class="fas fa-check-circle text-yellow-600 mr-2"></i>${nota}`;
+                container.appendChild(li);
+            });
+        }
+
+        function toggleJson() {
+            const container = document.getElementById('jsonContainer');
+            const toggleText = document.getElementById('toggleText');
+            
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                toggleText.textContent = 'Ocultar JSON';
+            } else {
+                container.classList.add('hidden');
+                toggleText.textContent = 'Mostrar JSON';
+            }
+        }
+
+        function copyJson() {
+            const jsonText = document.getElementById('jsonContent').textContent;
+            navigator.clipboard.writeText(jsonText).then(() => {
+                alert('JSON copiado al portapapeles!');
+            });
+        }
+    </script>
+</body>
+</html>
