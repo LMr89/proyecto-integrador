@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: 7service-app
+    ports:
+      - "8080:80"
+    environment:
+      # Configuración de Base de Datos
+      DB_HOST: tu-contenedor-db  # Nombre del contenedor de tu base de datos
+      DB_PORT: 5060
+      DB_NAME: taller_bicicletas
+      DB_USER: root
+      DB_PASS: tu-password-aqui
+
+      # Configuración de la Aplicación
+      APP_NAME: "Seven Service - Taller de Bicicletas"
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: http://localhost:8080
+
+      # Seguridad
+      APP_KEY: genera_una_clave_segura_de_32_caracteres
+      SESSION_LIFETIME: 7200
+    volumes:
+      # Montar solo logs para persistencia (opcional)
+      - ./storage/logs:/var/www/html/storage/logs
+    networks:
+      - 7service-network
+    restart: unless-stopped
+
+# Si tu contenedor de BD está en otro docker-compose,
+# necesitas crear una red externa. Si no, puedes comentar esto.
+networks:
+  7service-network:
+    external: true
+    # Si la red no existe, cámbialo a:
+    # driver: bridge

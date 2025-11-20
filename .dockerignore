@@ -1,0 +1,27 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Documentación
+docs/
+info/
+*.md
+README*
+
+# Archivos de entorno (no copiar .env con credenciales)
+.env
+
+# Logs y caché
+storage/logs/*
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
