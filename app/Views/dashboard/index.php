@@ -101,7 +101,7 @@
                                         <i class="fas fa-bicycle"></i> <?= htmlspecialchars($orden['bicicleta_marca'] . ' ' . $orden['bicicleta_modelo']) ?>
                                     </p>
                                 </div>
-                                <a href="<?php echo url('/ordenes/<?= $orden['); ?>'id_orden'] ?>" 
+                                <a href="<?php echo url('/ordenes/' . $orden['id_orden']); ?>" 
                                    class="text-blue-600 hover:text-blue-800">
                                     <i class="fas fa-eye"></i>
                                 </a>
@@ -215,7 +215,7 @@
                             S/. <?= number_format($orden['costo_total'], 2) ?>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <a href="<?php echo url('/ordenes/<?= $orden['); ?>'id_orden'] ?>" 
+                            <a href="<?php echo url('/ordenes/' . $orden['id_orden']); ?>" 
                                class="text-blue-600 hover:text-blue-900">
                                 <i class="fas fa-eye"></i> Ver
                             </a>

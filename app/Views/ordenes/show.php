@@ -67,7 +67,7 @@
                 </div>
 
                 <!-- Formulario para Cambiar Estado -->
-                <form id="cambiarEstadoForm" method="POST" action="<?php echo url('/ordenes/<?= $orden['); ?>'id_orden'] ?>/cambiar-estado" class="space-y-4">
+                <form id="cambiarEstadoForm" method="POST" action="<?php echo url('/ordenes/' . $orden['id_orden']); ?>/cambiar-estado" class="space-y-4">
                     <div>
                         <label for="nuevo_estado" class="block text-sm font-medium text-gray-700 mb-2">
                             <i class="fas fa-exchange-alt mr-1"></i> Cambiar a:
@@ -315,7 +315,7 @@
                 </h3>
                 <p class="text-sm mb-3 opacity-90">Comparte este enlace con el cliente:</p>
                 <div class="bg-white bg-opacity-20 p-3 rounded text-sm break-all mb-3">
-                    <?= $_SERVER['REQUEST_SCHEME'] ?>://<?= $_SERVER['HTTP_HOST'] ?><?php echo url('/seguimiento/<?= htmlspecialchars($orden['); ?>'codigo_seguimiento']) ?>
+                    <?= $_SERVER['REQUEST_SCHEME'] ?>://<?= $_SERVER['HTTP_HOST'] ?><?php echo url('/seguimiento/' . htmlspecialchars($orden['codigo_seguimiento'])); ?>
                 </div>
                 <button onclick="copiarLink('<?= htmlspecialchars($orden['codigo_seguimiento']) ?>')" 
                         class="w-full bg-white text-blue-600 py-2 rounded font-semibold hover:bg-gray-100 transition">

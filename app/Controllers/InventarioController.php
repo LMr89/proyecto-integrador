@@ -171,7 +171,7 @@ class InventarioController extends Controller
             
         } catch (\Exception $e) {
             $_SESSION['error'] = 'Error al actualizar producto: ' . $e->getMessage();
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/inventario/' . $id . '/editar');
+            redirect('/inventario/' . $id . '/editar');
             exit;
         }
     }

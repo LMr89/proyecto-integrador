@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../config/config.php'; ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,7 +31,7 @@
                         <p class="text-blue-100">Documentación de API REST - v1.0.0</p>
                     </div>
                 </div>
-                <a href="/UNIVERSIDAD/Integrador/7service/public/dashboard" 
+                <a href="<?php echo url('/dashboard'); ?>"
                    class="bg-white text-blue-600 px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
                     <i class="fas fa-home mr-2"></i> Dashboard
                 </a>
@@ -49,7 +50,7 @@
                 <div>
                     <p class="text-gray-600 mb-2"><strong>Base URL:</strong></p>
                     <code class="bg-gray-100 px-3 py-1 rounded text-sm">
-                        http://localhost/UNIVERSIDAD/Integrador/7service/public
+                        <?php echo rtrim(APP_URL, '/'); ?>
                     </code>
                 </div>
                 <div>
@@ -121,7 +122,7 @@ Cookie: PHPSESSID=...</pre>
                 Ejemplo de uso con JavaScript
             </h2>
             <pre class="text-sm">// Login
-fetch('http://localhost/UNIVERSIDAD/Integrador/7service/public/process_login.php', {
+fetch('<?php echo rtrim(APP_URL, '/'); ?>/process_login.php', {
     method: 'POST',
     credentials: 'include', // ⚠️ Importante: mantiene la sesión
     headers: {
@@ -136,14 +137,14 @@ fetch('http://localhost/UNIVERSIDAD/Integrador/7service/public/process_login.php
 });
 
 // Obtener estadísticas (después del login)
-fetch('http://localhost/UNIVERSIDAD/Integrador/7service/public/api/estadisticas', {
+fetch('<?php echo rtrim(APP_URL, '/'); ?>/api/estadisticas', {
     credentials: 'include' // Envía la cookie de sesión
 })
 .then(response => response.json())
 .then(data => console.log('Estadísticas:', data));
 
 // Buscar clientes
-fetch('http://localhost/UNIVERSIDAD/Integrador/7service/public/api/clientes/buscar?term=juan', {
+fetch('<?php echo rtrim(APP_URL, '/'); ?>/api/clientes/buscar?term=juan', {
     credentials: 'include'
 })
 .then(response => response.json())

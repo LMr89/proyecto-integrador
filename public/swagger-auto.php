@@ -35,8 +35,8 @@ $swagger = [
     ],
     'servers' => [
         [
-            'url' => 'http://localhost/UNIVERSIDAD/Integrador/7service/public',
-            'description' => 'Servidor de desarrollo'
+            'url' => rtrim(APP_URL, '/'),
+            'description' => 'Servidor de ' . APP_ENV
         ]
     ],
     'tags' => [],

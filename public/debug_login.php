@@ -82,7 +82,7 @@ if (isset($_POST['test_login'])) {
                 print_r($_SESSION);
                 echo "</pre>";
                 
-                echo "<p><a href='/UNIVERSIDAD/Integrador/7service/public/dashboard' style='display: inline-block; background: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Ir al Dashboard</a></p>";
+                echo "<p><a href='<?php echo url('/'); ?>dashboard' style='display: inline-block; background: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Ir al Dashboard</a></p>";
                 
             } else {
                 echo "<p style='color: red; font-weight: bold;'>❌ CONTRASEÑA INCORRECTA</p>";

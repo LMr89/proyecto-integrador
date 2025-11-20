@@ -60,7 +60,7 @@ class SeguimientoController extends Controller
         }
         
         // Redirigir a la vista de la orden
-        header('Location: /UNIVERSIDAD/Integrador/7service/public/seguimiento/' . $codigo);
+        redirect('/seguimiento/' . $codigo);
         exit;
     }
     

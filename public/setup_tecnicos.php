@@ -87,5 +87,5 @@ foreach ($tecnicos as $tecnico) {
 }
 
 echo "</table>";
-echo "<br><p><a href='/UNIVERSIDAD/Integrador/7service/public/login'>Ir al Login</a></p>";
+echo "<br><p><a href='<?php echo url('/'); ?>login'>Ir al Login</a></p>";
 ?>

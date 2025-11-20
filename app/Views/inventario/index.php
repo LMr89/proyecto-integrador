@@ -244,7 +244,7 @@
                                 </td>
                                 <?php if ($_SESSION['usuario_rol'] === 'admin'): ?>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <a href="<?php echo url('/inventario/<?= $producto['); ?>'id_producto'] ?>/editar" 
+                                    <a href="<?php echo url('/inventario/' . $producto['id_producto']); ?>/editar" 
                                        class="text-blue-600 hover:text-blue-900 mr-3">
                                         <i class="fas fa-edit"></i>
                                     </a>

@@ -142,7 +142,7 @@ class OrdenController extends Controller
             $codigoSeguimiento = $ordenCreada['codigo_seguimiento'];
             
             $_SESSION['success'] = "Orden #{$ordenId} creada exitosamente. Código de seguimiento: <strong>{$codigoSeguimiento}</strong>";
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/ordenes/' . $ordenId);
+            redirect('/ordenes/' . $ordenId);
             exit;
             
         } catch (\Exception $e) {
@@ -185,7 +185,7 @@ class OrdenController extends Controller
         
         if (empty($nuevoEstado)) {
             $_SESSION['error'] = 'El estado es requerido';
-            header('Location: /UNIVERSIDAD/Integrador/7service/public/ordenes/' . $id);
+            redirect('/ordenes/' . $id);
             exit;
         }
         
@@ -204,7 +204,7 @@ class OrdenController extends Controller
             // Si el estado es el mismo, no hacer nada
             if ($estadoAnterior === $nuevoEstado) {
                 $_SESSION['error'] = 'La orden ya tiene ese estado';
-                header('Location: /UNIVERSIDAD/Integrador/7service/public/ordenes/' . $id);
+                redirect('/ordenes/' . $id);
                 exit;
             }
             
@@ -226,7 +226,7 @@ class OrdenController extends Controller
             $_SESSION['error'] = 'Error al cambiar el estado: ' . $e->getMessage();
         }
         
-        header('Location: /UNIVERSIDAD/Integrador/7service/public/ordenes/' . $id);
+        redirect('/ordenes/' . $id);
         exit;
     }
     

@@ -186,11 +186,11 @@
                                     ?>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                    <a href="<?php echo url('/clientes/<?php echo $cliente['); ?>'id_cliente']; ?>" 
+                                    <a href="<?php echo url('/clientes/' . $cliente['id_cliente']); ?>"
                                        class="text-blue-600 hover:text-blue-900" title="Ver detalle">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="<?php echo url('/clientes/<?php echo $cliente['); ?>'id_cliente']; ?>/editar" 
+                                    <a href="<?php echo url('/clientes/' . $cliente['id_cliente'] . '/editar'); ?>"
                                        class="text-yellow-600 hover:text-yellow-900" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>

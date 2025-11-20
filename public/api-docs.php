@@ -15,7 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-$baseUrl = 'http://localhost/UNIVERSIDAD/Integrador/7service/public';
+// Cargar configuración para obtener la URL base
+require_once __DIR__ . '/../config/config.php';
+$baseUrl = rtrim(APP_URL, '/');
 
 $apiDocs = [
     'nombre' => 'Seven Service API',
@@ -270,7 +272,7 @@ $apiDocs = [
     'ejemplo_uso_fetch' => [
         'javascript' => "
 // Login
-fetch('http://localhost/UNIVERSIDAD/Integrador/7service/public/process_login.php', {
+fetch('$baseUrl/process_login.php', {
     method: 'POST',
     credentials: 'include', // Importante para mantener la sesión
     headers: {
@@ -280,14 +282,14 @@ fetch('http://localhost/UNIVERSIDAD/Integrador/7service/public/process_login.php
 });
 
 // Obtener estadísticas
-fetch('http://localhost/UNIVERSIDAD/Integrador/7service/public/api/estadisticas', {
+fetch('$baseUrl/api/estadisticas', {
     credentials: 'include' // Envía la cookie de sesión
 })
 .then(response => response.json())
 .then(data => console.log(data));
 
 // Buscar clientes
-fetch('http://localhost/UNIVERSIDAD/Integrador/7service/public/api/clientes/buscar?term=juan', {
+fetch('$baseUrl/api/clientes/buscar?term=juan', {
     credentials: 'include'
 })
 .then(response => response.json())

@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../config/config.php'; ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -187,7 +188,7 @@
         window.onload = function() {
             const ui = SwaggerUIBundle({
                 // Usa el endpoint automático que genera el JSON dinámicamente
-                url: "/UNIVERSIDAD/Integrador/7service/public/swagger-auto.php",
+                url: "<?php echo url('/swagger-auto.php'); ?>",
                 dom_id: '#swagger-ui',
                 deepLinking: true,
                 presets: [

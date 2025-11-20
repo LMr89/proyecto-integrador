@@ -250,11 +250,11 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="<?php echo url('/ordenes/<?= $orden['); ?>'id_orden'] ?>" 
+                                    <a href="<?php echo url('/ordenes/' . $orden['id_orden']); ?>" 
                                        class="text-blue-600 hover:text-blue-900 mr-3" title="Ver detalles">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="<?php echo url('/seguimiento/<?= htmlspecialchars($orden['); ?>'codigo_seguimiento']) ?>" 
+                                    <a href="<?php echo url('/seguimiento/' . htmlspecialchars($orden['codigo_seguimiento'])); ?>" 
                                        target="_blank"
                                        class="text-green-600 hover:text-green-900" title="Ver seguimiento público">
                                         <i class="fas fa-external-link-alt"></i>

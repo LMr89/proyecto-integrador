@@ -230,7 +230,7 @@ try {
     echo "<div style='background: #d4edda; padding: 20px; border-radius: 8px; border-left: 4px solid #28a745; margin-top: 20px;'>";
     echo "<h3 style='margin-top: 0;'>✅ ¡Inventario Poblado Exitosamente!</h3>";
     echo "<p><strong>Siguiente paso:</strong> Ve al módulo de inventario para ver todos los productos:</p>";
-    echo "<p><a href='/UNIVERSIDAD/Integrador/7service/public/inventario' style='background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;'>📦 Ver Inventario</a></p>";
+    echo "<p><a href='<?php echo url('/'); ?>inventario' style='background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;'>📦 Ver Inventario</a></p>";
     echo "</div>";
     
 } catch (Exception $e) {
