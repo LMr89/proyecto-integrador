@@ -21,6 +21,7 @@ services:
       APP_ENV: production
       APP_DEBUG: "false"
       APP_URL: http://localhost:8080
+      APP_BASE_PATH: ""
 
       # Seguridad
       APP_KEY: genera_una_clave_segura_de_32_caracteres

@@ -34,9 +34,9 @@ $router = require_once CONFIG_PATH . '/routes.php';
 // Obtener la URI solicitada
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-// Remover la ruta base si existe
-$basePath = '/UNIVERSIDAD/Integrador/7service/public';
-if (strpos($uri, $basePath) === 0) {
+// Remover la ruta base si existe (configurada en .env)
+$basePath = env('APP_BASE_PATH', '');
+if (!empty($basePath) && strpos($uri, $basePath) === 0) {
     $uri = substr($uri, strlen($basePath));
 }
 
